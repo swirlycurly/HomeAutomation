@@ -5,7 +5,7 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 
-def getCredentials():
+def get_credentials():
     pickle_file = './secrets/token.pickle'
     credentials = None
 

@@ -5,11 +5,15 @@
 
 import os
 import sys
-import getCredentials
-
+from projectId import get_project_id
+from Thermostat import Thermostat
+import time
 
 def main():
-    credentials = getCredentials.getCredentials()
+    nest = Thermostat()
+    while True:
+        print(nest.get_temp())
+        time.sleep(5)
 
 
 if __name__ == '__main__':
