@@ -5,14 +5,18 @@
 
 import os
 import sys
-from projectId import get_project_id
-from Thermostat import Thermostat
 import time
+
+from Thermostat import Thermostat
+
 
 def main():
     nest = Thermostat()
+    device = nest.get_devices()[0]
+    device_name = device["name"]  # .split('/')[-1]
+
     while True:
-        print(nest.get_temp())
+        print(nest.get_temp(device_name))
         time.sleep(5)
 
 
