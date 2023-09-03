@@ -5,12 +5,12 @@
 
 import os
 import sys
+import getCredentials
 
 
-def main(arguments):
-
-    print(arguments)
+def main():
+    credentials = getCredentials.getCredentials()
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()
