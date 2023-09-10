@@ -2,9 +2,10 @@ import os
 
 
 def get_project_id():
-    projectId = os.getenv("NEST_PROJECT_ID")
+    with open("./secrets/nest_project_id.txt", "r", encoding="utf-8") as f:
+        projectId = f.read()
 
-    if projectId is None:
-        raise Exception("NEST_PROJECT_ID Is missing from environment variable")
+    if projectId is None or len(projectId) == 0:
+        raise Exception("NEST_PROJECT_ID is missing")
 
     return projectId

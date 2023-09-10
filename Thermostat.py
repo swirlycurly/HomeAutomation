@@ -41,4 +41,9 @@ class Thermostat:
         response = request.execute()
         if debug:
             print(json.dumps(response, indent=2))
+        if response is {}:
+            print(
+                "Empty response. Check that you have given access to the devices"
+            )
+            raise Exception("Empty Response from request")
         return response
