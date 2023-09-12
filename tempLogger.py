@@ -8,8 +8,8 @@ import os
 import sys
 import time
 
-from Thermostat import Thermostat
-from sqliteDatabase import sqliteDatabase
+from thermostat import Thermostat
+from database import Database
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     nest = Thermostat()
     device = nest.get_devices()[0]
     device_name = device["name"]  # .split('/')[-1]
-    db = sqliteDatabase(nestdb)
+    db = Database(nestdb)
     db.create_data_table(nestThermostatTable)
 
     currentTemp = nest.get_temp(device_name)

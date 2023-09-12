@@ -1,8 +1,8 @@
 import atexit
 import json
 from googleapiclient.discovery import build
-from projectId import get_project_id
-from getCredentials import get_credentials
+from projectid import get_project_id
+from credentials import get_credentials
 
 
 class Thermostat:
@@ -26,18 +26,18 @@ class Thermostat:
             .devices()
             .list(parent=self.project_parent)
         )
-        response = self.__execute(devices_request)
+        response = self._execute(devices_request)
         return response["devices"]
 
     def get_temp(self, device_name):
         request = self.service.enterprises().devices().get(name=device_name)
-        response = self.__execute(request)
+        response = self._execute(request)
         tempC = response["traits"]["sdm.devices.traits.Temperature"][
             "ambientTemperatureCelsius"
         ]
         return tempC
 
-    def __execute(self, request, debug=False):
+    def _execute(self, request, debug=False):
         response = request.execute()
         if debug:
             print(json.dumps(response, indent=2))
