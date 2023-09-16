@@ -1,3 +1,4 @@
+#!usr/bin/env python
 import atexit
 import json
 from googleapiclient.discovery import build
@@ -20,13 +21,13 @@ class Thermostat:
         self.service.close
         print("Thermostat service closed")
 
-    def get_devices(self):
+    def get_devices(self, debug=False):
         devices_request = (
             self.service.enterprises()
             .devices()
             .list(parent=self.project_parent)
         )
-        response = self._execute(devices_request)
+        response = self._execute(devices_request, debug)
         return response["devices"]
 
     def get_temp(self, device_name):
