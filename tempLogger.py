@@ -4,14 +4,10 @@
 temperature from nest thermostat
 as well as the state of my whole house fan
 """
-
-import os
-import sys
-import time
-
+import asyncio
 from thermostat import Thermostat
 from database import Database
-from kasaoutlet import KasaOutlet
+import kasaoutlet
 
 
 def main():
@@ -30,10 +26,9 @@ def main():
     currentTemp = nest.get_temp(device_name)
     db.add_data(nestThermostatTable, currentTemp)
 
-    # outlet = KasaOutlet()
-    # fan = outlet.discover_device(whf)
-    # state = outlet.get_state(fan)
-    # db.add_data(wholeHouseFanTable, state)
+    fan = asyncio.run(kasaoutlet.discover_device(whf))
+    state = asyncio.run(kasaoutlet.get_state(fan))
+    db.add_data(wholeHouseFanTable, state)
 
 
 if __name__ == "__main__":

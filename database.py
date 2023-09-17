@@ -17,7 +17,7 @@ class Database:
             self._check_table_name(table_name)
             self.con.cursor().execute(
                 f"""CREATE TABLE IF NOT EXISTS
-                   {table_name}(datetime TEXT PRIMARY KEY, value REAL)
+                   {table_name}(datetime TEXT PRIMARY KEY, value)
                    WITHOUT ROWID""",
             )
 
