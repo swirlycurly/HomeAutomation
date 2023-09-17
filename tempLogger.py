@@ -13,10 +13,10 @@ import kasaoutlet
 def main():
     nestThermostatTable = "nestThermostat"
     wholeHouseFanTable = "wholeHouseFan"
-    nestdb = "nestdb.db"
-    whf = "Whole House Fan"
+    db = "homedata.db"
+    fanAlias = "Whole House Fan"
 
-    db = Database(nestdb)
+    db = Database(db)
     db.create_data_table(nestThermostatTable)
     db.create_data_table(wholeHouseFanTable)
 
@@ -26,7 +26,7 @@ def main():
     currentTemp = nest.get_temp(device_name)
     db.add_data(nestThermostatTable, currentTemp)
 
-    fan = asyncio.run(kasaoutlet.discover_device(whf))
+    fan = asyncio.run(kasaoutlet.discover_device(fanAlias))
     state = asyncio.run(kasaoutlet.get_state(fan))
     db.add_data(wholeHouseFanTable, state)
 
