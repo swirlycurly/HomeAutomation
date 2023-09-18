@@ -1,8 +1,12 @@
 import os
+import logging
 import pickle
 from google.auth.transport.requests import Request
 
 from google_auth_oauthlib.flow import InstalledAppFlow
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_credentials():
@@ -16,18 +20,26 @@ def get_credentials():
             print("Credentials loaded from disk")
         # If credentials is expired, we need to renew it
         if credentials.expired and credentials.refresh_token:
-            print("Credentials Expired, refreshing")
+            mes = "Credentials Expired, refreshing"
+            print(mes)
+            logger.debug(mes)
             try:
                 credentials.refresh(Request())
-                print("Credentails refreshed")
+                mes = "Credentials refreshed"
+                print(mes)
+                logger.debug(mes)
             except Exception as e:
-                print(f"{e} Failed to refresh credentials, obtaining new ones")
+                mes = f"{e} Failed to refresh credentials, obtaining new ones"
+                print(mes)
+                logger.debug(mes)
                 credentials = _get_new_credentials()
 
     # Token is not saved on disk
     else:
         # Obtain new token
-        print("Credentials don't exist, requesting new tokens")
+        mes = "Credentials don't exist, requesting new tokens"
+        print(mes)
+        logger.debug(mes)
         credentials = _get_new_credentials()
     # Always save token back to disk
     with open(pickle_file, "wb") as token:

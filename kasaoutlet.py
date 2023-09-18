@@ -1,7 +1,11 @@
+import logging
 import asyncio
 from kasa import Discover
 from kasa import SmartPlug
 import click
+
+
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -15,12 +19,14 @@ def query_state(alias):
 
 async def discover_device(alias):
     devices = await Discover.discover(timeout=2)
+    logger.debug("Discovered Kasa devices: %s", devices)
     first_match = next(
         (k for (k, v) in devices.items() if alias == v.alias), None
     )
     if first_match is None:
         raise Exception(f"Failed to find device matching alias {alias}")
     else:
+        logger.info("Kasa device matching alias %s is %s", alias, first_match)
         return SmartPlug(first_match)
 
 
