@@ -46,7 +46,7 @@ def _log_setup():
     handler = SysLogHandler(
         facility=SysLogHandler.LOG_DAEMON, address="/dev/log"
     )
-    formatter = CustomJsonFormatter("%(datetime)s %(level)s %(message)s")
+    formatter = CustomJsonFormatter("%(level)s %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
