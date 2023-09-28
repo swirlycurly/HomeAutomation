@@ -30,13 +30,29 @@ class Thermostat:
         response = self._execute(devices_request, debug)
         return response["devices"]
 
-    def get_temp(self, device_name):
+    def get_traits(self, device_name):
         request = self.service.enterprises().devices().get(name=device_name)
         response = self._execute(request)
-        tempC = response["traits"]["sdm.devices.traits.Temperature"][
+        return response["traits"]
+
+    @staticmethod
+    def extract_temp(traits):
+        tempC = traits["sdm.devices.traits.Temperature"][
             "ambientTemperatureCelsius"
         ]
         return tempC
+
+    @staticmethod
+    def extract_hvac_status(traits):
+        status = traits["sdm.devices.traits.ThermostatHvac"]["status"]
+        return status
+
+    @staticmethod
+    def extract_humidity(traits):
+        humidity = traits["sdm.devices.traits.Humidity"][
+            "ambientHumidityPercent"
+        ]
+        return humidity
 
     def _execute(self, request, debug=False):
         response = request.execute()

@@ -10,7 +10,7 @@ from pythonjsonlogger import jsonlogger
 from logging.handlers import SysLogHandler
 import asyncio
 from thermostat import Thermostat
-from database import Database
+from database import TimeSeriesDb
 import kasaoutlet
 
 
@@ -23,15 +23,22 @@ def main():
         db = "homedata.db"
         fanAlias = "Whole House Fan"
 
-        db = Database(db)
-        db.create_data_table(nestThermostatTable)
-        db.create_data_table(wholeHouseFanTable)
+        db = TimeSeriesDb(db)
+        db.create_table(
+            nestThermostatTable, "temperatureC", "hvacStatus", "humidity"
+        )
+        db.create_table(wholeHouseFanTable, "value")
 
         nest = Thermostat()
         device = nest.get_devices()[0]
         device_name = device["name"]
-        currentTemp = nest.get_temp(device_name)
-        db.add_data(nestThermostatTable, currentTemp)
+        traits = nest.get_traits(device_name)
+        db.add_data(
+            nestThermostatTable,
+            Thermostat.extract_temp(traits),
+            Thermostat.extract_hvac_status(traits),
+            Thermostat.extract_humidity(traits),
+        )
 
         fan = asyncio.run(kasaoutlet.discover_device(fanAlias))
         state = asyncio.run(kasaoutlet.get_state(fan))
