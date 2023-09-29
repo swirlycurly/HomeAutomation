@@ -7,10 +7,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 logger = logging.getLogger(__name__)
+secrets_path = "../secrets/"
 
 
 def get_credentials():
-    pickle_file = "./secrets/token.pickle"
+    pickle_file = os.path.join(secrets_path, "token.pickle")
     credentials = None
 
     # Token is saved on disk
@@ -49,7 +50,7 @@ def get_credentials():
 
 def _get_new_credentials():
     flow = InstalledAppFlow.from_client_secrets_file(
-        "./secrets/client_secret.json",
+        os.path.join(secrets_path, "client_secret.json"),
         scopes=["https://www.googleapis.com/auth/sdm.service"],
     )
     flow.run_local_server()
