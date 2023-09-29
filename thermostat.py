@@ -43,6 +43,13 @@ class Thermostat:
         return tempC
 
     @staticmethod
+    def extract_setpoint(traits):
+        tempC = traits["sdm.devices.traits.ThermostatTemperatureSetpoint"][
+            "heatCelsius"
+        ]
+        return tempC
+
+    @staticmethod
     def extract_hvac_status(traits):
         status = traits["sdm.devices.traits.ThermostatHvac"]["status"]
         return status

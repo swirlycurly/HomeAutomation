@@ -25,7 +25,11 @@ def main():
 
         db = TimeSeriesDb(db)
         db.create_table(
-            nestThermostatTable, "temperatureC", "hvacStatus", "humidity"
+            nestThermostatTable,
+            "temperatureC",
+            "hvacStatus",
+            "humidity",
+            "setpointC",
         )
         db.create_table(wholeHouseFanTable, "value")
 
@@ -38,6 +42,7 @@ def main():
             Thermostat.extract_temp(traits),
             Thermostat.extract_hvac_status(traits),
             Thermostat.extract_humidity(traits),
+            Thermostat.extract_setpoint(traits),
         )
 
         fan = asyncio.run(kasaoutlet.discover_device(fanAlias))
