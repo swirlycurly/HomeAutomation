@@ -4,6 +4,8 @@
 home automation data
 """
 import os
+import schedule
+import time
 from datetime import datetime
 import logging
 from pythonjsonlogger import jsonlogger
@@ -81,4 +83,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 
 
 if __name__ == "__main__":
-    main()
+    schedule.every(1).minutes.do(main)
+    while True:
+        schedule.run_pending()
+        time.sleep(5)
