@@ -2,8 +2,10 @@ FROM python:3.10
 
 WORKDIR /tempLogger
 
-COPY * .
+COPY ./src ./src
+COPY ./secrets ./secrets
+COPY requirements.txt .
 
-RUN pip install < /requirements.txt
+RUN pip install -r requirements.txt
 
-CMD ["python", "./tempLogger.py"]
+CMD ["python", "./src/tempLogger.py"]
