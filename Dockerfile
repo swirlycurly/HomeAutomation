@@ -8,4 +8,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "./src/tempLogger.py"]
+WORKDIR ./src
+
+ENTRYPOINT ["python", "templogger.py"]

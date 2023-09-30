@@ -4,19 +4,22 @@
 home automation data
 """
 import os
-import schedule
 import time
 from datetime import datetime
 import logging
-from pythonjsonlogger import jsonlogger
 from logging.handlers import SysLogHandler
 import asyncio
+import click
+import schedule
+from pythonjsonlogger import jsonlogger
 from thermostat import Thermostat
 from database import TimeSeriesDb
 import kasaoutlet
 
 
-def main():
+@click.command()
+@click.option("-i", "--interval", default=1)
+def monitor(interval):
     logger = _log_setup()
     nest_thermostat_name = "nestThermostat"
     fan_table_name = "wholeHouseFan"
@@ -59,8 +62,7 @@ def main():
         except Exception as e:
             logger.error("Failed to update value", e)
 
-    schedule.every(1).minutes.do(update)
-
+    schedule.every(interval).minutes.do(update)
     while True:
         schedule.run_pending()
         time.sleep(5)
@@ -95,4 +97,4 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 
 
 if __name__ == "__main__":
-    main()
+    monitor()

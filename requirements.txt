@@ -14,7 +14,6 @@ google-auth-oauthlib==1.0.0
 googleapis-common-protos==1.60.0
 httplib2==0.22.0
 idna==3.4
--e git+ssh://git@github.com/swirlycurly/HomeAutomation.git@0c105e27a11c7d08253bfc7ac00cfe1290cc1e66#egg=kasaoutlet
 oauthlib==3.2.2
 protobuf==4.24.2
 pyasn1==0.5.0

@@ -1,25 +1,25 @@
+import json
 import logging
 import requests
 from requests.compat import urljoin
-import json
 
 
 logger = logging.getLogger(__name__)
-base = "https://api.weather.gov"
-flagCoords = (35.1727, -111.6795)
-timeout = 5
+BASE = "https://api.weather.gov"
+FLAGCOORDS = (35.1727, -111.6795)
+TIMEOUT = 5
 
 
 def get_forecast_reader(lat, long):
     try:
         headers = {"user-agent": "bcurl3ss@gmail.com"}
-        url = urljoin(base, f"/points/{lat},{long}")
-        r = requests.get(url, headers=headers, timeout=timeout)
+        url = urljoin(BASE, f"/points/{lat},{long}")
+        r = requests.get(url, headers=headers, timeout=TIMEOUT)
         r.raise_for_status()
         fcastend = r.json()["properties"]["forecastHourly"]
 
         def get_forecast():
-            r = requests.get(fcastend, headers=headers, timeout=timeout)
+            r = requests.get(fcastend, headers=headers, timeout=TIMEOUT)
             return r.json()
 
         return get_forecast
@@ -30,5 +30,5 @@ def get_forecast_reader(lat, long):
 
 
 if __name__ == "__main__":
-    get_forecast = get_forecast_reader(*flagCoords)
+    get_forecast = get_forecast_reader(*FLAGCOORDS)
     print(json.dumps(get_forecast(), indent=2))
