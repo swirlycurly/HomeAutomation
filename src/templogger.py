@@ -18,40 +18,52 @@ import kasaoutlet
 
 def main():
     logger = _log_setup()
+    nest_thermostat_name = "nestThermostat"
+    fan_table_name = "wholeHouseFan"
+    dbname = "homedata.db"
+    fan_alias = "Whole House Fan"
+
     try:
         logger.debug("Initializing Home Automation Logger Script")
-        nestThermostatTable = "nestThermostat"
-        wholeHouseFanTable = "wholeHouseFan"
-        db = "homedata.db"
-        fanAlias = "Whole House Fan"
 
-        db = TimeSeriesDb(db)
+        db = TimeSeriesDb(dbname)
         db.create_table(
-            nestThermostatTable,
+            nest_thermostat_name,
             "temperatureC",
             "hvacStatus",
             "humidity",
             "setpointC",
         )
-        db.create_table(wholeHouseFanTable, "value")
-
-        nest = Thermostat()
-        device = nest.get_devices()[0]
-        device_name = device["name"]
-        traits = nest.get_traits(device_name)
-        db.add_data(
-            nestThermostatTable,
-            Thermostat.extract_temp(traits),
-            Thermostat.extract_hvac_status(traits),
-            Thermostat.extract_humidity(traits),
-            Thermostat.extract_setpoint(traits),
-        )
-
-        fan = asyncio.run(kasaoutlet.discover_device(fanAlias))
-        state = asyncio.run(kasaoutlet.get_state(fan))
-        db.add_data(wholeHouseFanTable, state)
+        db.create_table(fan_table_name, "value")
     except Exception as e:
-        logger.error("Failed to run home automation Logger Script", e)
+        logger.error("Failed to initialize house monitoring", e)
+        return
+
+    def update():
+        try:
+            nest = Thermostat()
+            device = nest.get_devices()[0]
+            device_name = device["name"]
+            traits = nest.get_traits(device_name)
+            db.add_data(
+                nest_thermostat_name,
+                Thermostat.extract_temp(traits),
+                Thermostat.extract_hvac_status(traits),
+                Thermostat.extract_humidity(traits),
+                Thermostat.extract_setpoint(traits),
+            )
+
+            fan = asyncio.run(kasaoutlet.discover_device(fan_alias))
+            state = asyncio.run(kasaoutlet.get_state(fan))
+            db.add_data(fan_table_name, state)
+        except Exception as e:
+            logger.error("Failed to update value", e)
+
+    schedule.every(1).minutes.do(update)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(5)
 
 
 def _log_setup():
@@ -83,7 +95,4 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
 
 
 if __name__ == "__main__":
-    schedule.every(1).minutes.do(main)
-    while True:
-        schedule.run_pending()
-        time.sleep(5)
+    main()

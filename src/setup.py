@@ -6,6 +6,9 @@ setup(
     py_modules=["kasaoutlet"],
     install_requires=[
         "Click",
+        "logging",
+        "kasa",
+        "asyncio",
     ],
     entry_points={
         "console_scripts": [
