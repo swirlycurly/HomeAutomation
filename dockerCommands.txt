@@ -1,2 +1,0 @@
-#Make a docker container that maps the log, and mounts a volume for database data to go to
-sudo docker run --net="host" -v /dev/log:/dev/log --mount 'type=volume,src=walkupData,dst=/tempLogger/src/data' homeautomation:v1

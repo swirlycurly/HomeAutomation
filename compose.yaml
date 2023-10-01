@@ -1,0 +1,11 @@
+services:
+  monitor:
+    build: .
+    volumes:
+      - /dev/log:/dev/log
+      - walkupData:/tempLogger/src/data
+    network_mode: "host"
+    restart: always
+
+volumes:
+  walkupData:
