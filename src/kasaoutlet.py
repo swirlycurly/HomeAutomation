@@ -33,3 +33,7 @@ async def discover_device(alias):
 async def get_state(device):
     await device.update()
     return device.is_on
+
+
+if __name__ == "__main__":
+    query_state()

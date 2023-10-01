@@ -23,7 +23,7 @@ def monitor(interval):
     logger = _log_setup()
     nest_thermostat_name = "nestThermostat"
     fan_table_name = "wholeHouseFan"
-    dbname = "homedata.db"
+    dbname = "data/homedata.db"
     fan_alias = "Whole House Fan"
 
     try:
